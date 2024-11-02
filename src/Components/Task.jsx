@@ -21,7 +21,7 @@ export function Task ({ title, description, isCompleted, isStarred, id }) {
   return (
     <article className='bg-itemBg p-4'>
       <div className='task-header flex items-center justify-between'>
-        <h3 className='text-primary text-xl font-bold'>{title}</h3>
+        <h3 className='text-primary text-xl font-bold leading-5 mb-1'>{title}</h3>
         <div className='task-buttons flex gap-2 items-center'>
           <div className='flex gap-2 items-center'>
             <label htmlFor='mark-completed' />

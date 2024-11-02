@@ -1,3 +1,5 @@
+![Banner del ToDo App](./src/assets/banner-todo.jpg)
+
 # ToDo App
 
 ## Descripción
