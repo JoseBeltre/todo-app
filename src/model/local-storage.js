@@ -34,4 +34,11 @@ export class TaskModel {
 
     TaskModel.saveTasks({ tasks })
   }
+
+  static delete ({ id }) {
+    let tasks = TaskModel.getAll()
+    tasks = tasks.splice(id, 1)
+
+    TaskModel.saveTasks({ tasks })
+  }
 }

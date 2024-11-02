@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
 import { useState } from 'react'
 import { FloatingInput } from './FloatingInput'
-import { CloseIcon } from './svg/CloseIcon'
 import { validateTask } from '../schemas/task.js'
 import { TaskModel } from '../model/local-storage.js'
+import { Modal } from './Modal.jsx'
 
 export function AddTaskModal ({ closeModal }) {
   const [title, setTitle] = useState()
@@ -12,13 +12,6 @@ export function AddTaskModal ({ closeModal }) {
   const [month, setMonth] = useState()
   const [day, setDay] = useState()
   const [errorMsg, setErrorMsg] = useState()
-
-  const showError = (error) => {
-    setErrorMsg(error)
-    setTimeout(() => {
-      setErrorMsg('')
-    }, 3000)
-  }
 
   const createNewTask = () => {
     console.log('Validating...')
@@ -46,9 +39,9 @@ export function AddTaskModal ({ closeModal }) {
       const res = validateTask(task)
       if (!res.success) {
         if (res.error.errors[0].message === 'Invalid date') {
-          return showError('Introduce una fecha válida.')
+          return setErrorMsg('Introduce una fecha válida.')
         }
-        return showError(res.error.errors[0].message)
+        return setErrorMsg(res.error.errors[0].message)
       }
       console.log('esta es la tarea desde afuera: ', task)
       TaskModel.create({ task })
@@ -59,14 +52,7 @@ export function AddTaskModal ({ closeModal }) {
   }
 
   return (
-    <div className='absolute backdrop-blur-sm left-0 top-0 w-screen h-screen p-4 flex items-center justify-center'>
-      <div className='bg-itemBg p-4 w-full max-w-[500px]'>
-        <div className='text-2xl font-bold border-b flex justify-between items-center'>
-          <h3 className=' '>Nueva Tarea</h3>
-          <button onClick={closeModal}>
-            <CloseIcon size='30px' color='#fff' />
-          </button>
-        </div>
+    <Modal closeModal={closeModal} title='Nueva Tarea'>
         <form
           className='mt-6 grid gap-6'
           onSubmit={(e) => {
@@ -120,7 +106,6 @@ export function AddTaskModal ({ closeModal }) {
             Agregar nueva tarea
           </button>
         </form>
-      </div>
-    </div>
+    </Modal>
   )
 }
