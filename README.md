@@ -1,8 +1,22 @@
-# React + Vite
+# ToDo App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Descripción
+**ToDo App** es una aplicación de lista de tareas desarrollada con React que permite a los usuarios crear, editar, marcar como completadas y eliminar tareas. La aplicación proporciona una interfaz sencilla y rápida para gestionar actividades diarias y aumentar la productividad. Además, cuenta con filtros para organizar y visualizar tareas en función de su estado.
 
-Currently, two official plugins are available:
+## Características
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- [x] **Diseño Responsive**
+- [x] **Agregar nuevas tareas**
+- [x] **Editar tareas**
+- [x] **Almacenamiento local**
+- [x] **Marcar como completadas**
+- [x] **Marcar como favoritas**
+- [ ] **Eliminar tareas**
+- [ ] **Filtros**
+- [ ] **Barra de búsqueda**
+
+## Tecnologías utilizadas
+
+- [React](https://reactjs.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [LocalStorage](https://developer.mozilla.org/es/docs/Web/API/Window/localStorage)
