@@ -7,21 +7,19 @@ import { Filter } from './Components/Filter'
 import { NewTaskButton } from './Components/NewTaskButton'
 import { AddTaskModal } from './Components/AddTaskModal'
 import { TaskModel } from './model/local-storage'
+import { DeleteTaskModal } from './Components/DeleteTaskModal'
 
 function App () {
   const [isNewTasksModalOpen, setIsNewTasksModalOpen] = useState(false)
+  const [isDeleteTasksModalOpen, setIsDeleteTasksModalOpen] = useState(false)
   const tasks = TaskModel.getAll()
-
-  const handleModal = () => {
-    setIsNewTasksModalOpen(!isNewTasksModalOpen)
-  }
 
   return (
     <>
       <header className='p-1 border-b mb-5 flex justify-between'>
         <h1 className='text-4xl font-bold'>Lista de Tareas</h1>
-        
-        <NewTaskButton openModal={handleModal} classNames='hidden lg:flex' />
+
+        <NewTaskButton openModal={() => setIsNewTasksModalOpen(!isNewTasksModalOpen)} classNames='hidden lg:flex' />
 
       </header>
       <main className='lg:grid lg:grid-cols-[auto_400px] lg:gap-6'>
@@ -42,7 +40,7 @@ function App () {
 
           <Filter filterName='Ordenar por' options={['Más recientes', 'Más antiguas', 'Se vencen primero', 'Se vencen último']} />
 
-          <NewTaskButton openModal={handleModal} classNames='flex lg:hidden' />
+          <NewTaskButton openModal={() => setIsNewTasksModalOpen(!isNewTasksModalOpen)} classNames='flex lg:hidden' />
 
         </nav>
 
@@ -50,11 +48,22 @@ function App () {
           {tasks &&
             tasks.map(({ title, description, completed, starred }, index) => {
               return (
-                <Task key={index} id={index} title={title} description={description} isCompleted={completed} isStarred={starred} />
+                <Task
+                  key={index}
+                  id={index}
+                  title={title}
+                  description={description}
+                  isCompleted={completed}
+                  isStarred={starred}
+                  openDeleteModal={
+                    () => { setIsDeleteTasksModalOpen(!isDeleteTasksModalOpen) }
+                  }
+                />
               )
             })}
         </section>
-        {isNewTasksModalOpen && <AddTaskModal closeModal={handleModal} />}
+        {isNewTasksModalOpen && <AddTaskModal closeModal={() => setIsNewTasksModalOpen(!isNewTasksModalOpen)} />}
+        {isDeleteTasksModalOpen && <DeleteTaskModal closeModal={() => setIsDeleteTasksModalOpen(!isDeleteTasksModalOpen)} />}
       </main>
     </>
   )

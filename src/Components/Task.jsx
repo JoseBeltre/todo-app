@@ -5,7 +5,7 @@ import { TrashIcon } from './svg/TrashIcon'
 import { ExpandIcon } from './svg/ExpandIcon'
 import { TaskModel } from '../model/local-storage'
 
-export function Task ({ title, description, isCompleted, isStarred, id }) {
+export function Task ({ title, description, isCompleted, isStarred, id, openDeleteModal }) {
   const [starred, setStarred] = useState(isStarred)
   const [completed, setCompleted] = useState(isCompleted)
 
@@ -37,7 +37,7 @@ export function Task ({ title, description, isCompleted, isStarred, id }) {
           <button onClick={toggleStarred}>
             <StarIcon fill={starred} />
           </button>
-          <button>
+          <button onClick={openDeleteModal}>
             <TrashIcon />
           </button>
         </div>

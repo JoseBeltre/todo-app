@@ -14,7 +14,6 @@ export function AddTaskModal ({ closeModal }) {
   const [errorMsg, setErrorMsg] = useState()
 
   const createNewTask = () => {
-    console.log('Validating...')
     let limitDate
 
     if (!description) {
@@ -43,7 +42,6 @@ export function AddTaskModal ({ closeModal }) {
         }
         return setErrorMsg(res.error.errors[0].message)
       }
-      console.log('esta es la tarea desde afuera: ', task)
       TaskModel.create({ task })
       closeModal()
     } catch (error) {

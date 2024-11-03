@@ -9,11 +9,11 @@
 
 - [x] **Diseño Responsive**
 - [x] **Agregar nuevas tareas**
-- [x] **Editar tareas**
 - [x] **Almacenamiento local**
 - [x] **Marcar como completadas**
 - [x] **Marcar como favoritas**
-- [ ] **Eliminar tareas**
+- [x] **Eliminar tareas**
+- [ ] **Editar tareas**
 - [ ] **Filtros**
 - [ ] **Barra de búsqueda**
 

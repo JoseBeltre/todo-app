@@ -36,8 +36,8 @@ export class TaskModel {
   }
 
   static delete ({ id }) {
-    let tasks = TaskModel.getAll()
-    tasks = tasks.splice(id, 1)
+    const tasks = TaskModel.getAll()
+    tasks.splice(id, 1)
 
     TaskModel.saveTasks({ tasks })
   }
