@@ -46,7 +46,7 @@ function App () {
 
         <section className='tasks grid gap-3 h-fit'>
           {tasks &&
-            tasks.map(({ title, description, completed, starred }, index) => {
+            tasks.map(({ title, description, completed, starred, createdAt, limitDate }, index) => {
               return (
                 <Task
                   key={index}
@@ -55,6 +55,8 @@ function App () {
                   description={description}
                   isCompleted={completed}
                   isStarred={starred}
+                  createdAt={createdAt}
+                  limitDate={limitDate}
                   openDeleteModal={
                     () => { setIsDeleteTasksModalOpen(!isDeleteTasksModalOpen) }
                   }
@@ -62,8 +64,18 @@ function App () {
               )
             })}
         </section>
-        {isNewTasksModalOpen && <AddTaskModal closeModal={() => setIsNewTasksModalOpen(!isNewTasksModalOpen)} />}
-        {isDeleteTasksModalOpen && <DeleteTaskModal closeModal={() => setIsDeleteTasksModalOpen(!isDeleteTasksModalOpen)} />}
+        {
+          isNewTasksModalOpen &&
+            <AddTaskModal
+              closeModal={() => setIsNewTasksModalOpen(!isNewTasksModalOpen)}
+            />
+        }
+        {
+          isDeleteTasksModalOpen &&
+            <DeleteTaskModal
+              closeModal={() => setIsDeleteTasksModalOpen(!isDeleteTasksModalOpen)}
+            />
+        }
       </main>
     </>
   )

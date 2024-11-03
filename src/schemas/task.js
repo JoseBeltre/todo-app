@@ -26,5 +26,9 @@ export const TaskSchema = z.object({
 })
 
 export function validateTask (object) {
-  return TaskSchema.safeParse(object)
+  const res = TaskSchema.safeParse(object)
+  if (!res.success && res.error.errors[0].message === 'Invalid date') {
+    res.error.errors[0].message = 'Introduce una fecha válida.'
+  }
+  return res
 }
