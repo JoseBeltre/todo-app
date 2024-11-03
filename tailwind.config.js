@@ -14,6 +14,9 @@ export default {
         itemBgHover: '#333333',
         primary: '#D9A1E7',
         secondary: '#C372D7'
+      },
+      screens: {
+        xs: '450px'
       }
     }
   },

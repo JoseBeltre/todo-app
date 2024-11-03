@@ -12,6 +12,7 @@ import { DeleteTaskModal } from './Components/DeleteTaskModal'
 function App () {
   const [isNewTasksModalOpen, setIsNewTasksModalOpen] = useState(false)
   const [isDeleteTasksModalOpen, setIsDeleteTasksModalOpen] = useState(false)
+  const [taskToDelete, setTaskToDelete] = useState()
   const tasks = TaskModel.getAll()
 
   return (
@@ -58,7 +59,10 @@ function App () {
                   createdAt={createdAt}
                   limitDate={limitDate}
                   openDeleteModal={
-                    () => { setIsDeleteTasksModalOpen(!isDeleteTasksModalOpen) }
+                    () => {
+                      setIsDeleteTasksModalOpen(!isDeleteTasksModalOpen)
+                      setTaskToDelete(index)
+                    }
                   }
                 />
               )
@@ -74,6 +78,7 @@ function App () {
           isDeleteTasksModalOpen &&
             <DeleteTaskModal
               closeModal={() => setIsDeleteTasksModalOpen(!isDeleteTasksModalOpen)}
+              id={taskToDelete}
             />
         }
       </main>

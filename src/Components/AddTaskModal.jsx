@@ -4,6 +4,7 @@ import { FloatingInput } from './FloatingInput'
 import { validateTask } from '../schemas/task.js'
 import { TaskModel } from '../model/local-storage.js'
 import { Modal } from './Modal.jsx'
+import { FloatingTextarea } from './FloatingTextarea.jsx'
 
 export function AddTaskModal ({ closeModal }) {
   const [title, setTitle] = useState()
@@ -49,7 +50,7 @@ export function AddTaskModal ({ closeModal }) {
           onChange={(e) => setTitle(e.target.value)}
         />
 
-        <FloatingInput
+        <FloatingTextarea
           name='description'
           label='Descripción (opcional)'
           onChange={(e) => setDescription(e.target.value)}

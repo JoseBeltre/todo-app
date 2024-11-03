@@ -1,4 +1,4 @@
-/* eslint-disable react/prop-types */
+import PropTypes from 'prop-types'
 import { Modal } from './Modal'
 import { TaskModel } from '../model/local-storage'
 
@@ -27,4 +27,9 @@ export function DeleteTaskModal ({ closeModal, id }) {
       </div>
     </Modal>
   )
+}
+
+DeleteTaskModal.propTypes = {
+  closeModal: PropTypes.func.isRequired,
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired
 }

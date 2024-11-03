@@ -5,7 +5,7 @@ import { TrashIcon } from './svg/TrashIcon'
 import { ExpandIcon } from './svg/ExpandIcon'
 import { TaskModel } from '../model/local-storage'
 
-export function Task ({ title, description = '', isCompleted, isStarred, createdAt, limitDate , id, openDeleteModal }) {
+export function Task ({ title, description = '', isCompleted, isStarred, createdAt, limitDate, id, openDeleteModal }) {
   const [starred, setStarred] = useState(isStarred)
   const [completed, setCompleted] = useState(isCompleted)
   const [expand, setExpand] = useState(false)
@@ -23,7 +23,7 @@ export function Task ({ title, description = '', isCompleted, isStarred, created
   if (expand) {
     shortDescription = description
   } else {
-    shortDescription = description?.slice(0, 100) + (description?.length > 100 ? '...' : '')
+    shortDescription = description?.slice(0, 100) + (description?.length > 70 ? '...' : '')
   }
 
   const formattedCreatedAt = new Date(createdAt).toLocaleDateString('es-ES')
@@ -57,8 +57,8 @@ export function Task ({ title, description = '', isCompleted, isStarred, created
           </button>
         </div>
       </div>
-      <div className='task-body overflow-hidden'>
-        <p className='task-description text-pretty text-white/70 mr-24 font-light leading-4 mb-3'>
+      <div className='task-body overflow-hidden mb-2'>
+        <p className='task-description text-white/70 font-light leading-4 break-words w-36 xs:w-[230px] sm:w-[400px] xl:w-[700px]'>
           {shortDescription}
         </p>
         {expand &&
@@ -76,7 +76,7 @@ export function Task ({ title, description = '', isCompleted, isStarred, created
 
       <button
         onClick={() => setExpand(!expand)}
-        className='w-fit ml-auto flex items-center text-primary mt-2 border-transparent px-1 border-b italic hover:border-primary'
+        className='w-fit ml-auto flex items-center text-primary border-transparent px-1 border-b italic hover:border-primary'
       >
         <span className='hidden md:inline-block'>
           {!expand ? 'Ampliar' : 'Ver menos'}
