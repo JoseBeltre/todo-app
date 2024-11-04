@@ -3,9 +3,10 @@ import PropTypes from 'prop-types'
 import { StarIcon } from './svg/StarIcon'
 import { TrashIcon } from './svg/TrashIcon'
 import { ExpandIcon } from './svg/ExpandIcon'
+import { EditIcon } from './svg/EditIcon'
 import { TaskModel } from '../model/local-storage'
 
-export function Task ({ title, description = '', isCompleted, isStarred, createdAt, limitDate, id, openDeleteModal }) {
+export function Task ({ title, description = '', isCompleted, isStarred, createdAt, limitDate, id, openDeleteModal, openEditModal }) {
   const [starred, setStarred] = useState(isStarred)
   const [completed, setCompleted] = useState(isCompleted)
   const [expand, setExpand] = useState(false)
@@ -34,7 +35,7 @@ export function Task ({ title, description = '', isCompleted, isStarred, created
   }
 
   return (
-    <article className='task bg-itemBg p-4'>
+    <article className='task bg-itemBg p-4 grid gap-2'>
       <div className='task-header flex items-center justify-between'>
         <h3 className='text-primary text-xl font-bold leading-5 mb-1'>{title}</h3>
         <div className='task-buttons flex gap-2 items-center'>
@@ -57,14 +58,14 @@ export function Task ({ title, description = '', isCompleted, isStarred, created
           </button>
         </div>
       </div>
-      <div className='task-body overflow-hidden mb-2'>
+      <div className='task-body flex flex-col gap-3 overflow-hidden mb-2'>
         <p className='task-description text-white/70 font-light leading-4 break-words w-36 xs:w-[230px] sm:w-[400px] xl:w-[700px]'>
           {shortDescription}
         </p>
         {expand &&
-          <ul className='leading-5'>
+          <ul className='leading-5 text-sm'>
             <li>
-              <span className='text-primary'>Anadida: </span>
+              <span className='text-primary'>Añadida: </span>
               {formattedCreatedAt}
             </li>
             <li>
@@ -74,15 +75,27 @@ export function Task ({ title, description = '', isCompleted, isStarred, created
           </ul>}
       </div>
 
-      <button
-        onClick={() => setExpand(!expand)}
-        className='w-fit ml-auto flex items-center text-primary border-transparent px-1 border-b italic hover:border-primary'
-      >
-        <span className='hidden md:inline-block'>
-          {!expand ? 'Ampliar' : 'Ver menos'}
-        </span>
-        <ExpandIcon expand={expand} color='#D9A1E7' />
-      </button>
+      <div className='task-footer flex'>
+        {
+        expand &&
+          <button
+            onClick={openEditModal}
+            className='flex text-green-300 border-transparent px-1 border-b italic hover:border-green-300'
+          >
+            <span>Editar</span>
+            <EditIcon color='#86efac' size='20px' />
+          </button>
+        }
+        <button
+          onClick={() => setExpand(!expand)}
+          className='w-fit ml-auto flex items-center text-primary border-transparent px-1 border-b italic hover:border-primary'
+        >
+          <span className=''>
+            {!expand ? 'Ampliar' : 'Ver menos'}
+          </span>
+          <ExpandIcon expand={expand} color='#D9A1E7' />
+        </button>
+      </div>
     </article>
   )
 }
@@ -95,5 +108,6 @@ Task.propTypes = {
   isCompleted: PropTypes.bool,
   isStarred: PropTypes.bool,
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  openDeleteModal: PropTypes.func.isRequired
+  openDeleteModal: PropTypes.func.isRequired,
+  openEditModal: PropTypes.func.isRequired
 }

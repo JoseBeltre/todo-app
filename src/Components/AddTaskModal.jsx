@@ -1,12 +1,12 @@
-/* eslint-disable react/prop-types */
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import { FloatingInput } from './FloatingInput'
 import { validateTask } from '../schemas/task.js'
 import { TaskModel } from '../model/local-storage.js'
 import { Modal } from './Modal.jsx'
 import { FloatingTextarea } from './FloatingTextarea.jsx'
 
-export function AddTaskModal ({ closeModal }) {
+export function AddTaskModal ({ closeModal, isEditing, id }) {
   const [title, setTitle] = useState()
   const [description, setDescription] = useState()
   const [year, setYear] = useState()
@@ -14,7 +14,23 @@ export function AddTaskModal ({ closeModal }) {
   const [day, setDay] = useState()
   const [errorMsg, setErrorMsg] = useState()
 
-  const createNewTask = () => {
+  useEffect(() => {
+    if (isEditing) {
+      const { title, description, limitDate } = TaskModel.get({ id })
+      console.log('id desde useeffect ', id)
+
+      setTitle(title)
+      setDescription(description)
+      if (limitDate) {
+        const formattedLimitDate = new Date(limitDate)
+        setDay(formattedLimitDate.getDay() + 1)
+        setMonth(formattedLimitDate.getMonth() + 1)
+        setYear(formattedLimitDate.getFullYear())
+      }
+    }
+  }, [isEditing, id])
+
+  const createTask = () => {
     const task = {
       title,
       description: !description ? undefined : description,
@@ -35,24 +51,47 @@ export function AddTaskModal ({ closeModal }) {
     closeModal()
   }
 
+  const updateTask = ({ id }) => {
+    const task = {
+      title,
+      description: !description ? undefined : description,
+      limitDate: undefined
+    }
+    if (day && month && year) {
+      task.limitDate = new Date(`${year}-${month}-${day}`)
+    }
+    TaskModel.update({ id, updatedTask: task })
+    closeModal()
+  }
+
+  const handleFormSubmission = () => {
+    if (isEditing) {
+      updateTask({ id })
+    } else {
+      createTask()
+    }
+  }
+
   return (
-    <Modal closeModal={closeModal} title='Nueva Tarea'>
+    <Modal closeModal={closeModal} title={isEditing ? 'Editar Tarea' : 'Nueva Tarea'}>
       <form
         className='mt-6 grid gap-6'
         onSubmit={(e) => {
           e.preventDefault()
-          createNewTask()
+          handleFormSubmission()
         }}
       >
         <FloatingInput
           name='title'
           label='Titulo'
+          value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
 
         <FloatingTextarea
           name='description'
           label='Descripción (opcional)'
+          value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
 
@@ -63,6 +102,7 @@ export function AddTaskModal ({ closeModal }) {
               name='day'
               label='Día'
               type='number'
+              value={day}
               onChange={(e) => setDay(e.target.value)}
             />
 
@@ -70,6 +110,7 @@ export function AddTaskModal ({ closeModal }) {
               name='month'
               label='Mes'
               type='number'
+              value={month}
               onChange={(e) => setMonth(e.target.value)}
             />
 
@@ -77,6 +118,7 @@ export function AddTaskModal ({ closeModal }) {
               name='year'
               label='Año'
               type='number'
+              value={year}
               onChange={(e) => setYear(e.target.value)}
             />
           </div>
@@ -86,9 +128,15 @@ export function AddTaskModal ({ closeModal }) {
           type='submit'
           className='hover:bg-secondary hover:text-white border-2 p-2 font-bold text-lg bg-itemBg border-secondary text-secondary transition-colors'
         >
-          Agregar nueva tarea
+          {isEditing ? 'Actualizar tarea' : 'Agregar nueva tarea'}
         </button>
       </form>
     </Modal>
   )
+}
+
+AddTaskModal.propTypes = {
+  closeModal: PropTypes.func.isRequired,
+  isEditing: PropTypes.bool,
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string])
 }

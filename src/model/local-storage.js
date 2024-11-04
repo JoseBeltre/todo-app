@@ -1,19 +1,18 @@
 export class TaskModel {
   static create ({ task }) {
-    const storage = window.localStorage
-    if (!storage.getItem('tasks')) storage.setItem('tasks', JSON.stringify([]))
-
-    const tasks = JSON.parse(storage.getItem('tasks'))
+    const tasks = TaskModel.getAll()
     tasks.push(task)
-    storage.setItem('tasks', JSON.stringify(tasks))
+    TaskModel.saveTasks({ tasks })
   }
 
   static getAll () {
-    const storage = window.localStorage
-    if (!storage.getItem('tasks')) return
-
-    const tasks = JSON.parse(storage.getItem('tasks'))
-    return tasks
+    const tasksStorage = window.localStorage.getItem('tasks')
+    try {
+      return tasksStorage ? JSON.parse(tasksStorage) : []
+    } catch (error) {
+      console.error('Error parsing tasks from localStorage:', error)
+      return []
+    }
   }
 
   static saveTasks ({ tasks }) {
@@ -40,5 +39,19 @@ export class TaskModel {
     tasks.splice(id, 1)
 
     TaskModel.saveTasks({ tasks })
+  }
+
+  static update ({ id, updatedTask }) {
+    const tasks = TaskModel.getAll()
+    tasks[id] = {
+      ...tasks[id],
+      ...updatedTask
+    }
+    TaskModel.saveTasks({ tasks })
+  }
+
+  static get ({ id }) {
+    const tasks = TaskModel.getAll()
+    return tasks[id]
   }
 }

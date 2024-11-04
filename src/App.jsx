@@ -13,11 +13,14 @@ function App () {
   const [isNewTasksModalOpen, setIsNewTasksModalOpen] = useState(false)
   const [isDeleteTasksModalOpen, setIsDeleteTasksModalOpen] = useState(false)
   const [taskToDelete, setTaskToDelete] = useState()
+  const [isEditTasksModalOpen, setIsEditTasksModalOpen] = useState(false)
+  const [taskToEdit, setTaskToEdit] = useState()
+
   const tasks = TaskModel.getAll()
 
   return (
     <>
-      <header className='p-1 border-b mb-5 flex justify-between'>
+      <header className='p-1 border-b mb-5 flex justify-between 2xl:mt-10'>
         <h1 className='text-4xl font-bold'>Lista de Tareas</h1>
 
         <NewTaskButton openModal={() => setIsNewTasksModalOpen(!isNewTasksModalOpen)} classNames='hidden lg:flex' />
@@ -64,6 +67,12 @@ function App () {
                       setTaskToDelete(index)
                     }
                   }
+                  openEditModal={
+                    () => {
+                      setIsEditTasksModalOpen(!isEditTasksModalOpen)
+                      setTaskToEdit(index)
+                    }
+                  }
                 />
               )
             })}
@@ -79,6 +88,14 @@ function App () {
             <DeleteTaskModal
               closeModal={() => setIsDeleteTasksModalOpen(!isDeleteTasksModalOpen)}
               id={taskToDelete}
+            />
+        }
+        {
+          isEditTasksModalOpen &&
+            <AddTaskModal
+              isEditing
+              closeModal={() => setIsEditTasksModalOpen(!isEditTasksModalOpen)}
+              id={taskToEdit}
             />
         }
       </main>

@@ -7,7 +7,7 @@ export function FloatingInput ({ name, label, type = 'text', value, onChange }) 
         name={name}
         id={name}
         type={type}
-        value={value}
+        defaultValue={value}
         onChange={onChange}
         placeholder=' '
         className='peer bg-itemBg w-full p-3 focus:outline-none border border-primary placeholder-shown:border-white/50'
@@ -26,6 +26,6 @@ FloatingInput.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   type: PropTypes.string,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   onChange: PropTypes.func
 }
