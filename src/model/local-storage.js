@@ -54,4 +54,26 @@ export class TaskModel {
     const tasks = TaskModel.getAll()
     return tasks[id]
   }
+
+  static getFilteredTasks ({ filter }) {
+    const filters = ['all', 'completed', 'starred', 'pending']
+    if (!filters.includes(filter)) throw new Error(`'${filter}' is not a valid filter.`)
+
+    const tasks = TaskModel.getAll()
+    let filteredTasks
+    switch (filter) {
+      case 'completed':
+        filteredTasks = tasks.filter(task => task.completed)
+        break
+      case 'starred':
+        filteredTasks = tasks.filter(task => task.starred)
+        break
+      case 'pending':
+        filteredTasks = tasks.filter(task => !task.completed)
+        break
+      default:
+        break
+    }
+    return filteredTasks
+  }
 }

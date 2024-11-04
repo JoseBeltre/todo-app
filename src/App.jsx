@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import './App.css'
 import { SearchIcon } from './Components/svg/SearchIcon'
@@ -15,8 +15,29 @@ function App () {
   const [taskToDelete, setTaskToDelete] = useState()
   const [isEditTasksModalOpen, setIsEditTasksModalOpen] = useState(false)
   const [taskToEdit, setTaskToEdit] = useState()
+  const [tasks, setTasks] = useState(TaskModel.getAll())
+  const [filter, setFilter] = useState()
 
-  const tasks = TaskModel.getAll()
+  useEffect(() => {
+    const getFilteredTasks = () => {
+      switch (filter) {
+        case 'Todas':
+          setTasks(TaskModel.getAll())
+          break
+        case 'Completadas':
+          setTasks(TaskModel.getFilteredTasks({ filter: 'completed' }))
+          break
+        case 'Favoritas':
+          setTasks(TaskModel.getFilteredTasks({ filter: 'starred' }))
+          break
+        case 'Pendientes':
+          setTasks(TaskModel.getFilteredTasks({ filter: 'pending' }))
+          break
+      }
+    }
+
+    getFilteredTasks()
+  }, [filter])
 
   return (
     <>
@@ -40,9 +61,19 @@ function App () {
 
           </form>
 
-          <Filter filterName='Mostrar' options={['Todas', 'Completadas', 'Pendientes', 'Favoritas']} />
+          <Filter
+            filterName='Mostrar'
+            options={['Todas', 'Completadas', 'Pendientes', 'Favoritas']}
+            selected={filter}
+            onClick={(e) => {
+              setFilter(e.target.textContent)
+            }}
+          />
 
-          <Filter filterName='Ordenar por' options={['Más recientes', 'Más antiguas', 'Se vencen primero', 'Se vencen último']} />
+          <Filter
+            filterName='Ordenar por'
+            options={['Más recientes', 'Más antiguas', 'Se vencen primero', 'Se vencen último']}
+          />
 
           <NewTaskButton openModal={() => setIsNewTasksModalOpen(!isNewTasksModalOpen)} classNames='flex lg:hidden' />
 
