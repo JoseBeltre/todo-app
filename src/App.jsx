@@ -5,7 +5,7 @@ import { SearchIcon } from './Components/svg/SearchIcon'
 import { Task } from './Components/Task'
 import { Filter } from './Components/Filter'
 import { NewTaskButton } from './Components/NewTaskButton'
-import { AddTaskModal } from './Components/AddTaskModal'
+import { TaskModal } from './Components/TaskModal'
 import { TaskModel } from './model/local-storage'
 import { DeleteTaskModal } from './Components/DeleteTaskModal'
 
@@ -79,7 +79,7 @@ function App () {
         </section>
         {
           isNewTasksModalOpen &&
-            <AddTaskModal
+            <TaskModal
               closeModal={() => setIsNewTasksModalOpen(!isNewTasksModalOpen)}
             />
         }
@@ -92,7 +92,7 @@ function App () {
         }
         {
           isEditTasksModalOpen &&
-            <AddTaskModal
+            <TaskModal
               isEditing
               closeModal={() => setIsEditTasksModalOpen(!isEditTasksModalOpen)}
               id={taskToEdit}
