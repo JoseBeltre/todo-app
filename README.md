@@ -13,7 +13,7 @@
 - [x] **Marcar como completadas**
 - [x] **Marcar como favoritas**
 - [x] **Eliminar tareas**
-- [ ] **Editar tareas**
+- [x] **Editar tareas**
 - [ ] **Filtros**
 - [ ] **Barra de búsqueda**
 
