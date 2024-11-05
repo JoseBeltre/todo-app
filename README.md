@@ -14,7 +14,8 @@
 - [x] **Marcar como favoritas**
 - [x] **Eliminar tareas**
 - [x] **Editar tareas**
-- [ ] **Filtros**
+- [x] **Filtros**
+- [ ] **Ordenar por**
 - [ ] **Barra de búsqueda**
 
 ## Tecnologías utilizadas
