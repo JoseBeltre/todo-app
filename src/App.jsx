@@ -108,6 +108,7 @@ function App () {
                 />
               )
             })}
+          {!tasks || <p className='text-white/50 text-center lg:pt-10'>Aún no hay tareas a realizar...</p>}
         </section>
         {
           isNewTasksModalOpen &&
