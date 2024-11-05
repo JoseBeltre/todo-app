@@ -1,8 +1,10 @@
 export class TaskModel {
   static create ({ task }) {
-    const tasks = TaskModel.getAll()
-    tasks.push(task)
-    TaskModel.saveTasks({ tasks })
+    const newTask = {
+      ...task,
+      id: crypto.randomUUID()
+    }
+    TaskModel.saveTask({ task: newTask })
   }
 
   static getAll () {
@@ -15,44 +17,51 @@ export class TaskModel {
     }
   }
 
-  static saveTasks ({ tasks }) {
-    const storage = window.localStorage
-    storage.setItem('tasks', JSON.stringify(tasks))
+  static saveTask ({ task }) {
+    const tasks = TaskModel.getAll()
+    tasks.push(task)
+
+    window.localStorage.setItem('tasks', JSON.stringify(tasks))
   }
 
   static star ({ id }) {
-    const tasks = TaskModel.getAll()
-    tasks[id].starred = !tasks[id].starred
+    const task = TaskModel.get({ id })
+    task.starred = !task.starred
 
-    TaskModel.saveTasks({ tasks })
+    TaskModel.update({ id, updatedTask: task })
   }
 
   static markCompleted ({ id }) {
-    const tasks = TaskModel.getAll()
-    tasks[id].completed = !tasks[id].completed
+    const task = TaskModel.get({ id })
+    task.completed = !task.completed
 
-    TaskModel.saveTasks({ tasks })
+    TaskModel.update({ id, updatedTask: task })
   }
 
   static delete ({ id }) {
     const tasks = TaskModel.getAll()
-    tasks.splice(id, 1)
+    const index = tasks.findIndex(task => task.id === id)
+    tasks.splice(index, 1)
 
-    TaskModel.saveTasks({ tasks })
+    window.localStorage.setItem('tasks', JSON.stringify(tasks))
   }
 
   static update ({ id, updatedTask }) {
     const tasks = TaskModel.getAll()
-    tasks[id] = {
-      ...tasks[id],
+    const index = tasks.findIndex(task => task.id === id)
+
+    tasks[index] = {
+      ...tasks[index],
       ...updatedTask
     }
-    TaskModel.saveTasks({ tasks })
+
+    window.localStorage.setItem('tasks', JSON.stringify(tasks))
   }
 
   static get ({ id }) {
     const tasks = TaskModel.getAll()
-    return tasks[id]
+    const task = tasks.filter(task => task.id === id)
+    return task[0]
   }
 
   static getFilteredTasks ({ filter }) {

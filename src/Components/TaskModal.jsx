@@ -16,8 +16,10 @@ export function TaskModal ({ closeModal, isEditing, id }) {
 
   useEffect(() => {
     if (isEditing) {
-      const { title, description, limitDate } = TaskModel.get({ id })
+      const task = TaskModel.get({ id })
+      const { title, description, limitDate } = task
       console.log('id desde useeffect ', id)
+      console.log('id desde useeffect ', task)
 
       setTitle(title)
       setDescription(description)

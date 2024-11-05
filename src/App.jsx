@@ -15,8 +15,8 @@ function App () {
   const [taskToDelete, setTaskToDelete] = useState()
   const [isEditTasksModalOpen, setIsEditTasksModalOpen] = useState(false)
   const [taskToEdit, setTaskToEdit] = useState()
-  const [tasks, setTasks] = useState(TaskModel.getAll())
-  const [filter, setFilter] = useState()
+  const [tasks, setTasks] = useState()
+  const [filter, setFilter] = useState('Todas')
 
   useEffect(() => {
     const getFilteredTasks = () => {
@@ -37,7 +37,7 @@ function App () {
     }
 
     getFilteredTasks()
-  }, [filter])
+  }, [filter, isNewTasksModalOpen, isDeleteTasksModalOpen, isEditTasksModalOpen])
 
   return (
     <>
@@ -68,6 +68,7 @@ function App () {
             onClick={(e) => {
               setFilter(e.target.textContent)
             }}
+            defaultOption='Todas'
           />
 
           <Filter
@@ -81,11 +82,11 @@ function App () {
 
         <section className='tasks grid gap-3 h-fit'>
           {tasks &&
-            tasks.map(({ title, description, completed, starred, createdAt, limitDate }, index) => {
+            tasks.map(({ id, title, description, completed, starred, createdAt, limitDate }) => {
               return (
                 <Task
-                  key={index}
-                  id={index}
+                  key={id}
+                  id={id}
                   title={title}
                   description={description}
                   isCompleted={completed}
@@ -95,13 +96,13 @@ function App () {
                   openDeleteModal={
                     () => {
                       setIsDeleteTasksModalOpen(!isDeleteTasksModalOpen)
-                      setTaskToDelete(index)
+                      setTaskToDelete(id)
                     }
                   }
                   openEditModal={
                     () => {
                       setIsEditTasksModalOpen(!isEditTasksModalOpen)
-                      setTaskToEdit(index)
+                      setTaskToEdit(id)
                     }
                   }
                 />
