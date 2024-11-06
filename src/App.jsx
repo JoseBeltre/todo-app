@@ -15,29 +15,40 @@ function App () {
   const [taskToDelete, setTaskToDelete] = useState()
   const [isEditTasksModalOpen, setIsEditTasksModalOpen] = useState(false)
   const [taskToEdit, setTaskToEdit] = useState()
-  const [tasks, setTasks] = useState()
+  const [tasks, setTasks] = useState([])
+  const [filteredTasks, setFilteredTasks] = useState([])
   const [filter, setFilter] = useState('Todas')
+  const [orderBy, setOrderBy] = useState('Se vencen primero')
 
   useEffect(() => {
-    const getFilteredTasks = () => {
-      switch (filter) {
-        case 'Todas':
-          setTasks(TaskModel.getAll())
-          break
-        case 'Completadas':
-          setTasks(TaskModel.getFilteredTasks({ filter: 'completed' }))
-          break
-        case 'Favoritas':
-          setTasks(TaskModel.getFilteredTasks({ filter: 'starred' }))
-          break
-        case 'Pendientes':
-          setTasks(TaskModel.getFilteredTasks({ filter: 'pending' }))
-          break
-      }
+    let filtered
+    switch (filter) {
+      case 'Completadas':
+        filtered = TaskModel.getFilteredTasks({ filter: 'completed' })
+        break
+      case 'Favoritas':
+        filtered = TaskModel.getFilteredTasks({ filter: 'starred' })
+        break
+      case 'Pendientes':
+        filtered = TaskModel.getFilteredTasks({ filter: 'pending' })
+        break
+      default:
+        filtered = TaskModel.getAll()
+        break
     }
-
-    getFilteredTasks()
+    setTasks(filtered)
   }, [filter, isNewTasksModalOpen, isDeleteTasksModalOpen, isEditTasksModalOpen])
+
+  useEffect(() => {
+    const orderedTasks = [...tasks].sort((a, b) => {
+      if (orderBy === 'Se vencen primero') return new Date(a.limitDate).getTime() - new Date(b.limitDate).getTime()
+      if (orderBy === 'Se vencen último') return new Date(b.limitDate).getTime() - new Date(a.limitDate).getTime()
+      if (orderBy === 'Más recientes') return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      if (orderBy === 'Más antiguas') return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      return new Date(a.limitDate).getTime() - new Date(b.limitDate).getTime()
+    })
+    setFilteredTasks(orderedTasks)
+  }, [tasks, orderBy])
 
   return (
     <>
@@ -68,12 +79,15 @@ function App () {
             onClick={(e) => {
               setFilter(e.target.textContent)
             }}
-            defaultOption='Todas'
           />
 
           <Filter
             filterName='Ordenar por'
             options={['Más recientes', 'Más antiguas', 'Se vencen primero', 'Se vencen último']}
+            selected={orderBy}
+            onClick={(e) => {
+              setOrderBy(e.target.textContent)
+            }}
           />
 
           <NewTaskButton openModal={() => setIsNewTasksModalOpen(!isNewTasksModalOpen)} classNames='flex lg:hidden' />
@@ -81,8 +95,8 @@ function App () {
         </nav>
 
         <section className='tasks grid gap-3 h-fit'>
-          {tasks &&
-            tasks.map(({ id, title, description, completed, starred, createdAt, limitDate }) => {
+          {filteredTasks &&
+            filteredTasks.map(({ id, title, description, completed, starred, createdAt, limitDate }) => {
               return (
                 <Task
                   key={id}
@@ -108,7 +122,7 @@ function App () {
                 />
               )
             })}
-          {!tasks || <p className='text-white/50 text-center lg:pt-10'>Aún no hay tareas a realizar...</p>}
+          {filteredTasks.length === 0 ? <p className='text-white/50 text-center lg:pt-10'>Aún no hay tareas a realizar...</p> : ''}
         </section>
         {
           isNewTasksModalOpen &&

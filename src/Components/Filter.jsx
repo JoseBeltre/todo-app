@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 
-export function Filter ({ filterName, options, onClick, selected, defaultOption = '' }) {
+export function Filter ({ filterName, options, onClick, selected }) {
   return (
     <div className='flex gap-2'>
       <span className='text-primary'>{filterName}: </span>
@@ -10,8 +10,10 @@ export function Filter ({ filterName, options, onClick, selected, defaultOption 
             return (
               <button
                 key={index}
-                className={`bg-itemBg p-0.5 px-3 text-white/60 font-light transition-colors 
-                  ${selected === option ? 'bg-secondary text-white font-bold' : (!selected && option === defaultOption ? 'bg-secondary text-white font-bold' : '')}`}
+                className={`p-0.5 px-3 transition-colors 
+                  ${selected === option
+                    ? 'bg-secondary text-white font-medium'
+                    : 'bg-itemBg text-white/60 font-light'}`}
                 onClick={onClick}
               >
                 {option}

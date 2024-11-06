@@ -15,7 +15,7 @@
 - [x] **Eliminar tareas**
 - [x] **Editar tareas**
 - [x] **Filtros**
-- [ ] **Ordenar por**
+- [x] **Ordenar por**
 - [ ] **Barra de búsqueda**
 
 ## Tecnologías utilizadas
