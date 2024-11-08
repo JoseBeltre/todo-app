@@ -8,6 +8,9 @@ import { NewTaskButton } from './Components/NewTaskButton'
 import { TaskModal } from './Components/TaskModal'
 import { TaskModel } from './model/local-storage'
 import { DeleteTaskModal } from './Components/DeleteTaskModal'
+import Instagram from './Components/svg/Instagram'
+import Github from './Components/svg/Github'
+import Website from './Components/svg/Website'
 
 function App () {
   const [isNewTasksModalOpen, setIsNewTasksModalOpen] = useState(false)
@@ -17,8 +20,10 @@ function App () {
   const [taskToEdit, setTaskToEdit] = useState()
   const [tasks, setTasks] = useState([])
   const [filteredTasks, setFilteredTasks] = useState([])
-  const [filter, setFilter] = useState('Todas')
-  const [orderBy, setOrderBy] = useState('Se vencen primero')
+  const filterOptions = ['Todas', 'Completadas', 'Pendientes', 'Favoritas']
+  const [filter, setFilter] = useState(filterOptions[0])
+  const orderByOptions = ['Más recientes', 'Más antiguas', 'Se vencen primero', 'Se vencen último']
+  const [orderBy, setOrderBy] = useState(orderByOptions[2])
 
   useEffect(() => {
     let filtered
@@ -41,11 +46,18 @@ function App () {
 
   useEffect(() => {
     const orderedTasks = [...tasks].sort((a, b) => {
-      if (orderBy === 'Se vencen primero') return new Date(a.limitDate).getTime() - new Date(b.limitDate).getTime()
-      if (orderBy === 'Se vencen último') return new Date(b.limitDate).getTime() - new Date(a.limitDate).getTime()
-      if (orderBy === 'Más recientes') return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-      if (orderBy === 'Más antiguas') return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      return new Date(a.limitDate).getTime() - new Date(b.limitDate).getTime()
+      switch (orderBy) {
+        case 'Se vencen primero':
+          return new Date(a.limitDate).getTime() - new Date(b.limitDate).getTime()
+        case 'Se vencen último':
+          return new Date(b.limitDate).getTime() - new Date(a.limitDate).getTime()
+        case 'Más recientes':
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        case 'Más antiguas':
+          return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        default:
+          return new Date(a.limitDate).getTime() - new Date(b.limitDate).getTime()
+      }
     })
     setFilteredTasks(orderedTasks)
   }, [tasks, orderBy])
@@ -74,7 +86,7 @@ function App () {
 
           <Filter
             filterName='Mostrar'
-            options={['Todas', 'Completadas', 'Pendientes', 'Favoritas']}
+            options={filterOptions}
             selected={filter}
             onClick={(e) => {
               setFilter(e.target.textContent)
@@ -83,7 +95,7 @@ function App () {
 
           <Filter
             filterName='Ordenar por'
-            options={['Más recientes', 'Más antiguas', 'Se vencen primero', 'Se vencen último']}
+            options={orderByOptions}
             selected={orderBy}
             onClick={(e) => {
               setOrderBy(e.target.textContent)
@@ -146,6 +158,14 @@ function App () {
             />
         }
       </main>
+      <footer className='mt-auto flex justify-center items-center gap-3 text-white/50'>
+        <p>Diseñado y desarrollado por José L. Beltre C.</p>
+        <ul className='flex items-center gap-2'>
+          <li><a href='https://www.jose-web.com'> <Website width='1.2em' fill='rgb(255 255 255 / 0.5)' /> </a></li>
+          <li><a href='https://www.instagram.com/josefo.bel'> <Instagram fill='rgb(255 255 255 / 0.5)' className='mr-0.5' /> </a></li>
+          <li><a href='https://www.github.com/JoseBeltre'> <Github fill='rgb(255 255 255 / 0.5)' /> </a></li>
+        </ul>
+      </footer>
     </>
   )
 }
