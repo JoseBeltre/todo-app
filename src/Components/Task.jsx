@@ -36,7 +36,7 @@ export function Task ({ title, description = '', isCompleted, isStarred, created
 
   return (
     <article className='task bg-itemBg p-4 grid gap-2'>
-      <div className='task-header flex items-center justify-between'>
+      <div className='task-header flex items-start justify-between'>
         <h3 className='text-primary text-xl font-bold leading-5 mb-1'>{title}</h3>
         <div className='task-buttons flex gap-2 items-center'>
           <div className='flex gap-2 items-center'>
@@ -59,7 +59,7 @@ export function Task ({ title, description = '', isCompleted, isStarred, created
         </div>
       </div>
       <div className='task-body flex flex-col gap-3 overflow-hidden mb-2'>
-        <p className='task-description text-white/70 font-light leading-4 break-words w-36 xs:w-[230px] sm:w-[400px] xl:w-[700px]'>
+        <p className='task-description text-white/70 font-light leading-4 break-words xs:w-[230px] sm:w-[400px] xl:w-[700px]'>
           {shortDescription}
         </p>
         {expand &&

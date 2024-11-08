@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 
 import './App.css'
-import { SearchIcon } from './Components/svg/SearchIcon'
 import { Task } from './Components/Task'
 import { Filter } from './Components/Filter'
 import { NewTaskButton } from './Components/NewTaskButton'
@@ -11,6 +10,7 @@ import { DeleteTaskModal } from './Components/DeleteTaskModal'
 import Instagram from './Components/svg/Instagram'
 import Github from './Components/svg/Github'
 import Website from './Components/svg/Website'
+import { SearchBar } from './Components/SearchBar'
 
 function App () {
   const [isNewTasksModalOpen, setIsNewTasksModalOpen] = useState(false)
@@ -24,6 +24,7 @@ function App () {
   const [filter, setFilter] = useState(filterOptions[0])
   const orderByOptions = ['Más recientes', 'Más antiguas', 'Se vencen primero', 'Se vencen último']
   const [orderBy, setOrderBy] = useState(orderByOptions[2])
+  const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
     let filtered
@@ -62,6 +63,13 @@ function App () {
     setFilteredTasks(orderedTasks)
   }, [tasks, orderBy])
 
+  useEffect(() => {
+    const filtered = tasks.filter(task => {
+      return task.title.toLowerCase().includes(searchQuery.toLowerCase())
+    })
+    setFilteredTasks(filtered)
+  }, [searchQuery, tasks])
+
   return (
     <>
       <header className='p-1 border-b mb-5 flex justify-between 2xl:mt-10'>
@@ -74,15 +82,11 @@ function App () {
 
         <nav className='mb-4 grid gap-2 h-fit lg:order-1'>
 
-          <form className='search-form bg-itemBg flex'>
-
-            <input type='text' name='search' placeholder='Buscar tarea...' className='flex-grow bg-transparent px-4 text-white/70 placeholder:text-white/30' />
-
-            <button type='submit' className='p-3 px-4 bg-[#2f2f2f]'>
-              <SearchIcon color='#D9A1E7' size='27px' />
-            </button>
-
-          </form>
+          <SearchBar
+            onInput={(e) => {
+              setSearchQuery(e.target.value)
+            }}
+          />
 
           <Filter
             filterName='Mostrar'
@@ -134,7 +138,11 @@ function App () {
                 />
               )
             })}
-          {filteredTasks.length === 0 ? <p className='text-white/50 text-center lg:pt-10'>Aún no hay tareas a realizar...</p> : ''}
+          {searchQuery && filteredTasks.length === 0
+            ? <p className='text-white/50 text-center lg:pt-10'>No existe tal tarea...</p>
+            : (filteredTasks.length === 0)
+                ? <p className='text-white/50 text-center lg:pt-10'>Aún no hay tareas a realizar...</p>
+                : ''}
         </section>
         {
           isNewTasksModalOpen &&
@@ -158,13 +166,15 @@ function App () {
             />
         }
       </main>
-      <footer className='mt-auto flex justify-center items-center gap-3 text-white/50'>
-        <p>Diseñado y desarrollado por José L. Beltre C.</p>
-        <ul className='flex items-center gap-2'>
-          <li><a href='https://www.jose-web.com'> <Website width='1.2em' fill='rgb(255 255 255 / 0.5)' /> </a></li>
-          <li><a href='https://www.instagram.com/josefo.bel'> <Instagram fill='rgb(255 255 255 / 0.5)' className='mr-0.5' /> </a></li>
-          <li><a href='https://www.github.com/JoseBeltre'> <Github fill='rgb(255 255 255 / 0.5)' /> </a></li>
-        </ul>
+      <footer className='mt-auto text-white/50'>
+        <p className='flex justify-center items-center gap-3 mt-3 leading-5'>
+          Diseñado y desarrollado por José L. Beltre C.
+          <ul className='flex items-center gap-2'>
+            <li><a href='https://www.jose-web.com'> <Website width='1.2em' fill='rgb(255 255 255 / 0.5)' className='hover:fill-white transition-colors' /> </a></li>
+            <li><a href='https://www.instagram.com/josefo.bel'> <Instagram fill='rgb(255 255 255 / 0.5)' className='mr-0.5 hover:fill-white transition-colors' /> </a></li>
+            <li><a href='https://www.github.com/JoseBeltre'> <Github fill='rgb(255 255 255 / 0.5)' className='hover:fill-white transition-colors' /> </a></li>
+          </ul>
+        </p>
       </footer>
     </>
   )
